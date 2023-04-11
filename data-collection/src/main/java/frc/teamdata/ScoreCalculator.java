@@ -141,7 +141,7 @@ public class ScoreCalculator {
 
 
         AvgDefense = Defense/3;
-        AvgAuto = Auto/11;
+        AvgAuto = Auto/8;
         AvgMobility = Mobility/4;
         AvgOffense = Offense/4;
         AvgTotal = (AvgAuto + AvgDefense + AvgMobility + AvgOffense)/4 + Total;

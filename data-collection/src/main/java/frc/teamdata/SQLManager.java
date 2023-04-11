@@ -2,6 +2,8 @@ package frc.teamdata;
 
 import java.sql.*;
 
+import javafx.scene.control.TableView;
+
 
 public class SQLManager {
 
@@ -69,6 +71,16 @@ public class SQLManager {
             updateData.setInt(7, (Entry + 1));
             updateData.setString(8, TeamName.toString());
             updateData.executeUpdate();
+        }
+        conn.close();
+    }
+
+    public void updateFXTable(TableView teamdata) throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
+        Statement stmt = conn.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT * FROM TeamData");
+        while(result.next()) {
+            teamdata.getItems().add(new Team(result.getString("TeamNumber"), result.getString("DriveTrain"), result.getDouble("Auto"), result.getDouble("Offense"), result.getDouble("Defense"), result.getDouble("Mobility"), result.getDouble("Total"), result.getInt("WinStreak")));
         }
         conn.close();
     }
