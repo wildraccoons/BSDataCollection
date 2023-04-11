@@ -2,6 +2,7 @@ package frc.teamdata;
 
 import java.sql.*;
 
+
 import javafx.scene.control.TableView;
 
 
@@ -16,8 +17,7 @@ public class SQLManager {
     public void updateScores(String DriveTrain, double AvgAuto, double AvgDefense, double AvgMobility, double AvgOffense, double AvgTotal, boolean hasWon) throws SQLException {
         boolean exists = false;
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
-        Statement stmt = conn.createStatement();
-        ResultSet result = stmt.executeQuery("SELECT * FROM TeamData");
+        ResultSet result = conn.createStatement().executeQuery("SELECT * FROM TeamData");
         double prevAuto = 0, prevOffense = 0, prevDefense = 0, prevMobility = 0, prevTotal = 0;
         int WinStreak = 0, Entry = 0;
         if (hasWon) {
@@ -75,13 +75,30 @@ public class SQLManager {
         conn.close();
     }
 
-    public void updateFXTable(TableView teamdata) throws SQLException {
+    public void updateFXTable(TableView<Team> teamdata) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
-        Statement stmt = conn.createStatement();
-        ResultSet result = stmt.executeQuery("SELECT * FROM TeamData");
+        ResultSet result = conn.createStatement().executeQuery("SELECT * FROM TeamData");
         while(result.next()) {
             teamdata.getItems().add(new Team(result.getString("TeamNumber"), result.getString("DriveTrain"), result.getDouble("Auto"), result.getDouble("Offense"), result.getDouble("Defense"), result.getDouble("Mobility"), result.getDouble("Total"), result.getInt("WinStreak")));
         }
+        conn.close();
+    }
+
+    public void clearAllData() throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
+        conn.createStatement().executeUpdate("DELETE FROM TeamData");
+        conn.close();
+    }
+
+    public void clearSelectedData(Object[] teams) throws SQLException{
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
+
+        for (Object a : teams) {
+            PreparedStatement deleteData = conn.prepareStatement("DELETE FROM TeamData WHERE TeamNumber = ?");
+            deleteData.setString(1, ((Team) a).getTeamNumber());
+            deleteData.executeUpdate();
+        }
+
         conn.close();
     }
 }
