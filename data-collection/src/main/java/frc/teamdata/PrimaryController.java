@@ -35,4 +35,9 @@ public class PrimaryController {
         Team6.replace(0, Team6.length(), Blue3.getText());
         App.setRoot("secondary");
     }
+
+    @FXML
+    private void switchToTeamData() throws IOException {
+        App.setRoot("teamdata");
+    }
 }

@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="638.0" prefWidth="884.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frc.teamdata.PrimaryController">
    <children>
       <Label layoutX="395.0" layoutY="37.0" text="  Team Numbers: " />
@@ -61,5 +60,6 @@
             <TextField fx:id="Blue3" text="Null" />
          </children>
       </HBox>
+      <Button layoutX="9.0" layoutY="12.0" mnemonicParsing="false" onAction="#switchToTeamData" prefHeight="25.0" prefWidth="869.0" text="Go To Team Data" />
    </children>
 </Pane>
