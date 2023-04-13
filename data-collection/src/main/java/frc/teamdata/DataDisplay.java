@@ -2,6 +2,9 @@ package frc.teamdata;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.SelectionMode;
@@ -32,7 +35,17 @@ public class DataDisplay {
     public TableColumn<Team, Integer> WinStreak = new TableColumn<>("WinStreak");
 
     TableViewSelectionModel<Team> selectionModel;
+    public static ScheduledExecutorService executorService;
 
+    Runnable runnableTask = () -> {
+        try {
+            if(teamdata.checkForUpdates()) {
+                updateTable();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    };
     @FXML
     private void initialize() throws ClassNotFoundException, SQLException {
         teamdata = new SQLManager("null");
@@ -47,12 +60,18 @@ public class DataDisplay {
         teamdata.updateFXTable(TeamData);
         selectionModel = TeamData.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(runnableTask, 10, 180, TimeUnit.SECONDS);
     }
 
     @FXML
-    private void goBack() throws IOException {
+    private void goBack() throws IOException, InterruptedException {
+        executorService.awaitTermination(5, TimeUnit.SECONDS);
         App.setRoot("primary");
     }
+
+    
+
 
     @FXML
     private void updateTable() throws SQLException {
@@ -68,8 +87,9 @@ public class DataDisplay {
 
     @FXML
     private void clearSelectedTeams() throws SQLException {
-        selectionModel.clearSelection();
         teamdata.clearSelectedData(selectionModel.getSelectedItems().toArray());
+        selectionModel.clearSelection();
         updateTable();
     }
+
 }

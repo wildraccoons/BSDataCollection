@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import javafx.scene.control.CheckBox;
 public class ScoreCalculator {
-
     
     public void evaluateScore(String TeamName, String DriveTrain, boolean Won, CheckBox z1, CheckBox z2, CheckBox z3, CheckBox z4, CheckBox z5, CheckBox z6, CheckBox z7, CheckBox z8, CheckBox z9, CheckBox z10, CheckBox z11, CheckBox z12, CheckBox z13, CheckBox z14, CheckBox z15, CheckBox z16, CheckBox z17, CheckBox z18, CheckBox z19, CheckBox z20, CheckBox z21, CheckBox z22, CheckBox z23, CheckBox z24, CheckBox z25) throws ClassNotFoundException, SQLException {
         int Defense = 0, Offense =0 , Mobility = 0, Auto = 0, Total = 0;
@@ -140,12 +139,16 @@ public class ScoreCalculator {
 
 
 
-        AvgDefense = Defense/3;
-        AvgAuto = Auto/8;
-        AvgMobility = Mobility/4;
-        AvgOffense = Offense/4;
+        AvgDefense = ((double) Defense)/3;
+        AvgAuto = ((double) Auto)/8;
+        AvgMobility = ((double) Mobility)/4;
+        AvgOffense = ((double) Offense)/4;
         AvgTotal = (AvgAuto + AvgDefense + AvgMobility + AvgOffense)/4 + Total;
-
         team.updateScores(DriveTrain, AvgAuto, AvgDefense, AvgMobility, AvgOffense, AvgTotal, Won);
+    }
+
+    public static double round(double value, int precision) {
+        int scale = (int) Math.pow(10, precision);
+        return (double) Math.round(value * scale) / scale;
     }
 }

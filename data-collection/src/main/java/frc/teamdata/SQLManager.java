@@ -1,13 +1,13 @@
 package frc.teamdata;
 
 import java.sql.*;
-
+import java.util.ArrayList;
 
 import javafx.scene.control.TableView;
 
 
 public class SQLManager {
-
+    ArrayList<Integer> entries = new ArrayList<Integer>();
     private StringBuffer TeamName = new StringBuffer();
     public SQLManager (String TeamName) throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -17,7 +17,7 @@ public class SQLManager {
     public void updateScores(String DriveTrain, double AvgAuto, double AvgDefense, double AvgMobility, double AvgOffense, double AvgTotal, boolean hasWon) throws SQLException {
         boolean exists = false;
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
-        ResultSet result = conn.createStatement().executeQuery("SELECT * FROM TeamData");
+        ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData");
         double prevAuto = 0, prevOffense = 0, prevDefense = 0, prevMobility = 0, prevTotal = 0;
         int WinStreak = 0, Entry = 0;
         if (hasWon) {
@@ -72,16 +72,22 @@ public class SQLManager {
             updateData.setString(8, TeamName.toString());
             updateData.executeUpdate();
         }
+        entries = getEntries(result);
+        conn.close();
+    }
+
+    public void updateFXTable(TableView<Team> teamdata, int i) throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
+        ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData");
+        while(result.next()) {
+            teamdata.getItems().add(new Team(result.getString("TeamNumber"), result.getString("DriveTrain"), ScoreCalculator.round(result.getDouble("Auto"), i), ScoreCalculator.round(result.getDouble("Offense"), i), ScoreCalculator.round(result.getDouble("Defense"), i), ScoreCalculator.round(result.getDouble("Mobility"), i), ScoreCalculator.round(result.getDouble("Total"), i), result.getInt("WinStreak")));
+        }
+        entries = getEntries(result);
         conn.close();
     }
 
     public void updateFXTable(TableView<Team> teamdata) throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
-        ResultSet result = conn.createStatement().executeQuery("SELECT * FROM TeamData");
-        while(result.next()) {
-            teamdata.getItems().add(new Team(result.getString("TeamNumber"), result.getString("DriveTrain"), result.getDouble("Auto"), result.getDouble("Offense"), result.getDouble("Defense"), result.getDouble("Mobility"), result.getDouble("Total"), result.getInt("WinStreak")));
-        }
-        conn.close();
+        this.updateFXTable(teamdata, 3);
     }
 
     public void clearAllData() throws SQLException {
@@ -100,5 +106,28 @@ public class SQLManager {
         }
 
         conn.close();
+    }
+    public ArrayList<Integer> getEntries(ResultSet result) throws SQLException {
+        ArrayList<Integer> entries = new ArrayList<Integer>();
+        result.beforeFirst();
+        while(result.next()) {
+            entries.add(result.getInt("Entries"));
+        }
+        return entries;
+        
+    }
+    public boolean checkForUpdates() throws SQLException {
+        boolean updated = false;
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
+        ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData");
+        ArrayList<Integer> newEntries = new ArrayList<Integer>();
+        while (result.next()) {
+            newEntries.add(result.getInt("Entries"));
+        }
+        if (!(entries.equals(newEntries))){
+            updated = true;
+        }
+        conn.close();
+        return updated;
     }
 }

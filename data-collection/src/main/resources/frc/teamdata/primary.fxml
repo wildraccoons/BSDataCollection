@@ -8,6 +8,7 @@
 <?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="638.0" prefWidth="884.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frc.teamdata.PrimaryController">
    <children>
@@ -61,5 +62,10 @@
          </children>
       </HBox>
       <Button layoutX="9.0" layoutY="12.0" mnemonicParsing="false" onAction="#switchToTeamData" prefHeight="25.0" prefWidth="869.0" text="Go To Team Data" />
+      <Label fx:id="ErrorStatement" layoutX="349.0" layoutY="291.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" wrapText="true">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

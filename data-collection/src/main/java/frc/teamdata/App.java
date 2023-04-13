@@ -35,4 +35,11 @@ public class App extends Application {
         launch();
     }
 
+    @Override
+public void stop() throws InterruptedException{
+    if (!(DataDisplay.executorService == null)) {
+    DataDisplay.executorService.shutdown();
+    }
+}
+
 }
