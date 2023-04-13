@@ -66,7 +66,7 @@ public class DataDisplay {
 
     @FXML
     private void goBack() throws IOException, InterruptedException {
-        executorService.awaitTermination(5, TimeUnit.SECONDS);
+        executorService.shutdown();
         App.setRoot("primary");
     }
 
