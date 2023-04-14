@@ -13,6 +13,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -36,6 +37,8 @@ public class DataDisplay {
     public TableColumn<Team, Double> Total = new TableColumn<>("Total");
     @FXML
     public TableColumn<Team, Integer> WinStreak = new TableColumn<>("WinStreak");
+    @FXML
+    public TextField rowFilter;
 
     TableViewSelectionModel<Team> selectionModel;
     public static ScheduledExecutorService executorService;
@@ -80,14 +83,14 @@ public class DataDisplay {
         App.setRoot("primary");
     }
 
-    
-
-
-
     @FXML
     private void updateTable() throws SQLException {
         TeamData.getItems().removeAll(TeamData.getItems());
-        teamdata.updateFXTable(TeamData, roundBox.getValue());
+        if (rowFilter.getText() != null) {
+            teamdata.filterRows(TeamData, rowFilter.getText(), roundBox.getValue());
+        } else {
+            teamdata.updateFXTable(TeamData, roundBox.getValue());
+        }
     }
 
     @FXML

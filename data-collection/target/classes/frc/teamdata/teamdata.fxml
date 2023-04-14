@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
@@ -24,7 +25,7 @@
       </TableView>
       <Button layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
       <Button layoutX="767.0" layoutY="14.0" mnemonicParsing="false" onAction="#updateTable" text="Update Table" />
-      <Button layoutX="134.0" layoutY="11.0" mnemonicParsing="false" onAction="#clearSelectedTeams" text="Clear Selected Items" textFill="RED">
+      <Button layoutX="79.0" layoutY="11.0" mnemonicParsing="false" onAction="#clearSelectedTeams" text="Clear Selected Items" textFill="RED">
          <font>
             <Font name="System Bold Italic" size="14.0" />
          </font>
@@ -34,11 +35,12 @@
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </Button>
-      <ComboBox fx:id="roundBox" layoutX="463.0" layoutY="14.0" onAction="#updateTable" prefHeight="25.0" prefWidth="76.0" promptText="Round To..." />
-      <Label layoutX="375.0" layoutY="17.0" text="Round To..." textAlignment="CENTER">
+      <ComboBox fx:id="roundBox" layoutX="316.0" layoutY="13.0" onAction="#updateTable" prefHeight="25.0" prefWidth="76.0" promptText="Round To..." />
+      <Label layoutX="240.0" layoutY="16.0" text="Round To..." textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
+      <TextField fx:id="rowFilter" layoutX="426.0" layoutY="13.0" onAction="#updateTable" promptText="Filter Rows" />
    </children>
 </Pane>
