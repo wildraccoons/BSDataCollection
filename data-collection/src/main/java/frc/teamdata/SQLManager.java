@@ -9,9 +9,13 @@ import javafx.scene.control.TableView;
 public class SQLManager {
     ArrayList<Integer> entries = new ArrayList<Integer>();
     private StringBuffer TeamName = new StringBuffer();
-    public SQLManager (String TeamName) throws SQLException, ClassNotFoundException {
+    public SQLManager (String TeamName) throws ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         this.TeamName.replace(0, this.TeamName.length(), TeamName);  
+    }
+
+    public SQLManager() throws ClassNotFoundException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
     }
 
     public void updateScores(String DriveTrain, double AvgAuto, double AvgDefense, double AvgMobility, double AvgOffense, double AvgTotal, boolean hasWon) throws SQLException {

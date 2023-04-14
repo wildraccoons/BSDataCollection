@@ -102,7 +102,7 @@ public class ScoreCalculator {
         }
 
         if (z17.isSelected()) {
-            Defense += 2;
+            Defense += 3;
         }
 
         if (z18.isSelected()) {
@@ -110,7 +110,7 @@ public class ScoreCalculator {
         }
 
         if (z19.isSelected()) {
-            Defense += 5;
+            Defense += 4;
         }
 
         if (z20.isSelected()) {
@@ -134,16 +134,16 @@ public class ScoreCalculator {
         }
 
         if (z25.isSelected()) {
-            Total += 2;
+            Total += 1;
         }
 
 
 
-        AvgDefense = ((double) Defense)/3;
-        AvgAuto = ((double) Auto)/8;
-        AvgMobility = ((double) Mobility)/4;
-        AvgOffense = ((double) Offense)/4;
-        AvgTotal = (AvgAuto + AvgDefense + AvgMobility + AvgOffense)/4 + Total;
+        AvgDefense = ((double) Defense)/4;
+        AvgAuto = ((double) Auto)/10;
+        AvgMobility = ((double) Mobility)/3;
+        AvgOffense = ((double) Offense)/5;
+        AvgTotal = (AvgAuto + AvgDefense + AvgMobility + AvgOffense + Total)/4;
         team.updateScores(DriveTrain, AvgAuto, AvgDefense, AvgMobility, AvgOffense, AvgTotal, Won);
     }
 
