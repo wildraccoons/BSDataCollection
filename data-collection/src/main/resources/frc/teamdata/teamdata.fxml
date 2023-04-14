@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
@@ -24,23 +25,24 @@
         </columns>
       </TableView>
       <Button layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
-      <Button layoutX="767.0" layoutY="14.0" mnemonicParsing="false" onAction="#updateTable" text="Update Table" />
+      <Button layoutX="783.0" layoutY="13.0" mnemonicParsing="false" onAction="#updateTable" text="Update Table" />
       <Button layoutX="79.0" layoutY="11.0" mnemonicParsing="false" onAction="#clearSelectedTeams" text="Clear Selected Items" textFill="RED">
          <font>
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="657.0" layoutY="12.0" mnemonicParsing="false" onAction="#clearAll" text="Clear All" textFill="RED">
+      <Button layoutX="699.0" layoutY="11.0" mnemonicParsing="false" onAction="#clearAll" text="Clear All" textFill="RED">
          <font>
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </Button>
-      <ComboBox fx:id="roundBox" layoutX="316.0" layoutY="13.0" onAction="#updateTable" prefHeight="25.0" prefWidth="76.0" promptText="Round To..." />
-      <Label layoutX="240.0" layoutY="16.0" text="Round To..." textAlignment="CENTER">
+      <ComboBox fx:id="roundBox" layoutX="338.0" layoutY="14.0" onAction="#updateTable" prefHeight="25.0" prefWidth="76.0" promptText="Round To..." />
+      <Label layoutX="255.0" layoutY="16.0" text="Round To..." textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="rowFilter" layoutX="426.0" layoutY="13.0" onAction="#updateTable" promptText="Filter Rows" />
+      <TextField fx:id="rowFilter" layoutX="460.0" layoutY="13.0" onAction="#updateTable" prefHeight="25.0" prefWidth="113.0" promptText="Filter Rows" />
+      <ToggleButton fx:id="matchCase" layoutX="580.0" layoutY="13.0" mnemonicParsing="false" onAction="#updateTable" prefHeight="25.0" prefWidth="87.0" text="Match Case" />
    </children>
 </Pane>

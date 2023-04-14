@@ -14,6 +14,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -39,6 +40,8 @@ public class DataDisplay {
     public TableColumn<Team, Integer> WinStreak = new TableColumn<>("WinStreak");
     @FXML
     public TextField rowFilter;
+    @FXML
+    public ToggleButton matchCase;
 
     TableViewSelectionModel<Team> selectionModel;
     public static ScheduledExecutorService executorService;
@@ -87,7 +90,7 @@ public class DataDisplay {
     private void updateTable() throws SQLException {
         TeamData.getItems().removeAll(TeamData.getItems());
         if (rowFilter.getText() != null) {
-            teamdata.filterRows(TeamData, rowFilter.getText(), roundBox.getValue());
+            teamdata.filterRows(TeamData, rowFilter.getText(), roundBox.getValue(), matchCase.isSelected());
         } else {
             teamdata.updateFXTable(TeamData, roundBox.getValue());
         }
