@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -44,5 +45,6 @@
       </Label>
       <TextField fx:id="rowFilter" layoutX="460.0" layoutY="13.0" onAction="#updateTable" prefHeight="25.0" prefWidth="113.0" promptText="Filter Rows" />
       <ToggleButton fx:id="matchCase" layoutX="580.0" layoutY="13.0" mnemonicParsing="false" onAction="#updateTable" prefHeight="25.0" prefWidth="87.0" text="Match Case" />
+      <ProgressIndicator fx:id="indicator" layoutX="73.0" layoutY="70.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="526.0" prefWidth="726.0" visible="false" />
    </children>
 </Pane>

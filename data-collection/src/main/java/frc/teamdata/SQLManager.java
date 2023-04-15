@@ -2,20 +2,24 @@ package frc.teamdata;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.scene.control.TableView;
 
 
 public class SQLManager {
-    ArrayList<Integer> entries = new ArrayList<Integer>();
+    HashMap<String, Integer> entries;
     private StringBuffer TeamName = new StringBuffer();
     public SQLManager (String TeamName) throws ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         this.TeamName.replace(0, this.TeamName.length(), TeamName);  
     }
 
-    public SQLManager() throws ClassNotFoundException {
+    public SQLManager() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
+        entries = getEntries(conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData"));
+        conn.close();
     }
 
     public void updateScores(String DriveTrain, double AvgAuto, double AvgDefense, double AvgMobility, double AvgOffense, double AvgTotal, boolean hasWon) throws SQLException {
@@ -111,7 +115,7 @@ public class SQLManager {
       boolean matchFound = false;
       ArrayList<Character> listChars = new ArrayList<>();
         ArrayList<Character> listComparisonChars = new ArrayList<>();
-      for (int i = 0; i < (chars.length - comparisonChars.length); i++) {
+      for (int i = 0; i <= (chars.length - comparisonChars.length); i++) {
         for (int n = 0; n < comparisonChars.length; n++) {
             if (matchCase) {
             listComparisonChars.add(comparisonChars[n]);
@@ -148,11 +152,11 @@ public class SQLManager {
         conn.close();
     }
 
-    public ArrayList<Integer> getEntries(ResultSet result) throws SQLException {
-        ArrayList<Integer> entries = new ArrayList<Integer>();
+    public HashMap<String, Integer> getEntries(ResultSet result) throws SQLException {
+        HashMap<String, Integer> entries = new HashMap<>();
         result.beforeFirst();
         while(result.next()) {
-            entries.add(result.getInt("Entries"));
+            entries.put(result.getString("TeamNumber"), result.getInt("Entries"));
         }
         return entries;
         
@@ -161,12 +165,9 @@ public class SQLManager {
     public boolean checkForUpdates() throws SQLException {
         boolean updated = false;
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
-        ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData");
-        ArrayList<Integer> newEntries = new ArrayList<Integer>();
-        while (result.next()) {
-            newEntries.add(result.getInt("Entries"));
-        }
+        HashMap<String, Integer> newEntries = getEntries(conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData"));
         if (!(entries.equals(newEntries))){
+            entries = newEntries;
             updated = true;
         }
         conn.close();

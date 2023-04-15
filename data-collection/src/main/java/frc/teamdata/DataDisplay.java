@@ -2,6 +2,8 @@ package frc.teamdata;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.temporal.ChronoUnit;
+import java.time.LocalTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -10,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -42,6 +45,8 @@ public class DataDisplay {
     public TextField rowFilter;
     @FXML
     public ToggleButton matchCase;
+    @FXML
+    ProgressIndicator indicator;
 
     TableViewSelectionModel<Team> selectionModel;
     public static ScheduledExecutorService executorService;
@@ -53,9 +58,15 @@ public class DataDisplay {
 
     Runnable autoUpdate = () -> {
         try {
+            indicator.setVisible(true);
+            LocalTime time = LocalTime.now();
+            while (1 > ChronoUnit.SECONDS.between(time, LocalTime.now())) {
+
+            }
             if(teamdata.checkForUpdates()) {
                 updateTable();
             }
+            indicator.setVisible(false);
         } catch (SQLException e) {
             e.printStackTrace();
         }
