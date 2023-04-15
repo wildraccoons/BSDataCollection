@@ -7,7 +7,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
@@ -23,6 +22,7 @@
             <TableColumn fx:id="Mobility" editable="false" prefWidth="75.0" sortType="DESCENDING" text="Mobility" />
             <TableColumn fx:id="Total" editable="false" prefWidth="75.0" sortType="DESCENDING" text="Total" />
             <TableColumn fx:id="WinStreak" editable="false" prefWidth="75.0" sortType="DESCENDING" text="Win Streak" />
+            <TableColumn fx:id="Rank" prefWidth="34.0" text="Rank" />
         </columns>
       </TableView>
       <Button layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
@@ -37,14 +37,15 @@
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </Button>
-      <ComboBox fx:id="roundBox" layoutX="338.0" layoutY="14.0" onAction="#updateTable" prefHeight="25.0" prefWidth="76.0" promptText="Round To..." />
+      <ComboBox fx:id="roundBox" layoutX="331.0" layoutY="14.0" onAction="#updateTable" prefHeight="25.0" prefWidth="76.0" promptText="Round To..." />
       <Label layoutX="255.0" layoutY="16.0" text="Round To..." textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="rowFilter" layoutX="460.0" layoutY="13.0" onAction="#updateTable" prefHeight="25.0" prefWidth="113.0" promptText="Filter Rows" />
-      <ToggleButton fx:id="matchCase" layoutX="580.0" layoutY="13.0" mnemonicParsing="false" onAction="#updateTable" prefHeight="25.0" prefWidth="87.0" text="Match Case" />
+      <TextField fx:id="rowFilter" layoutX="414.0" layoutY="13.0" onAction="#updateTable" prefHeight="25.0" prefWidth="113.0" promptText="Filter Rows" />
       <ProgressIndicator fx:id="indicator" layoutX="73.0" layoutY="70.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="526.0" prefWidth="726.0" visible="false" />
+      <ComboBox fx:id="rankBox" layoutX="579.0" layoutY="13.0" onAction="#updateTable" prefHeight="25.0" prefWidth="87.0" visibleRowCount="5" />
+      <Label layoutX="527.0" layoutY="17.0" text="Rank By..." />
    </children>
 </Pane>

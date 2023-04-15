@@ -17,7 +17,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -42,9 +41,11 @@ public class DataDisplay {
     @FXML
     public TableColumn<Team, Integer> WinStreak = new TableColumn<>("WinStreak");
     @FXML
-    public TextField rowFilter;
+    public TableColumn<Team, Integer> Rank = new TableColumn<>("Rank");
     @FXML
-    public ToggleButton matchCase;
+    public ComboBox<String> rankBox;
+    @FXML
+    public TextField rowFilter;
     @FXML
     ProgressIndicator indicator;
 
@@ -82,9 +83,12 @@ public class DataDisplay {
         Mobility.setCellValueFactory(new PropertyValueFactory<>("Mobility"));
         Total.setCellValueFactory(new PropertyValueFactory<>("Total"));
         WinStreak.setCellValueFactory(new PropertyValueFactory<>("WinStreak"));
+        Rank.setCellValueFactory(new PropertyValueFactory<>("Rank"));
         roundBox.setValue(3);
         roundBox.setItems(roundOptions);
-        teamdata.updateFXTable(TeamData);
+        rankBox.setValue("Total");
+        rankBox.setItems(FXCollections.observableArrayList("Auto", "Offense", "Defense", "Mobility", "Total"));
+        teamdata.updateFXTable(TeamData, rankBox.getValue());
         selectionModel = TeamData.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
         executorService = Executors.newSingleThreadScheduledExecutor();
@@ -101,9 +105,9 @@ public class DataDisplay {
     private void updateTable() throws SQLException {
         TeamData.getItems().removeAll(TeamData.getItems());
         if (rowFilter.getText() != null) {
-            teamdata.filterRows(TeamData, rowFilter.getText(), roundBox.getValue(), matchCase.isSelected());
+            teamdata.filterRows(TeamData, rowFilter.getText(), roundBox.getValue(), rankBox.getValue());
         } else {
-            teamdata.updateFXTable(TeamData, roundBox.getValue());
+            teamdata.updateFXTable(TeamData, roundBox.getValue(), rankBox.getValue());
         }
     }
 

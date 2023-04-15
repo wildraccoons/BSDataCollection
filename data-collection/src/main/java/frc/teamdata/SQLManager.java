@@ -2,7 +2,17 @@ package frc.teamdata;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javafx.scene.control.TableView;
 
@@ -84,56 +94,37 @@ public class SQLManager {
         conn.close();
     }
 
-    public void updateFXTable(TableView<Team> teamdata, int i) throws SQLException {
+    public void updateFXTable(TableView<Team> teamdata, int i, String rankType) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
         ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData");
+        HashMap<String, Integer> ranks = rankTeams(result, rankType);
         while(result.next()) {
-            teamdata.getItems().add(new Team(result.getString("TeamNumber"), result.getString("DriveTrain"), ScoreCalculator.round(result.getDouble("Auto"), i), ScoreCalculator.round(result.getDouble("Offense"), i), ScoreCalculator.round(result.getDouble("Defense"), i), ScoreCalculator.round(result.getDouble("Mobility"), i), ScoreCalculator.round(result.getDouble("Total"), i), result.getInt("WinStreak")));
+            teamdata.getItems().add(new Team(result.getString("TeamNumber"), result.getString("DriveTrain"), ScoreCalculator.round(result.getDouble("Auto"), i), ScoreCalculator.round(result.getDouble("Offense"), i), ScoreCalculator.round(result.getDouble("Defense"), i), ScoreCalculator.round(result.getDouble("Mobility"), i), ScoreCalculator.round(result.getDouble("Total"), i), result.getInt("WinStreak"), ranks.get(result.getString("TeamNumber"))));
         }
         entries = getEntries(result);
         conn.close();
     }
 
-    public void updateFXTable(TableView<Team> teamdata) throws SQLException {
-        this.updateFXTable(teamdata, 3);
+
+    public void updateFXTable(TableView<Team> teamdata, String rankType) throws SQLException {
+        this.updateFXTable(teamdata, 3, rankType);
     }
 
-    public void filterRows(TableView<Team> teamdata, String filter, int i, boolean matchCase) throws SQLException {
+    public void filterRows(TableView<Team> teamdata, String filter, int i, String rankType) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
         ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData");
+        HashMap<String, Integer> ranks = rankTeams(result, rankType);
         char[] charFilter = filter.toCharArray();
         while(result.next()) {
             char[] teamName = result.getString("TeamNumber").toCharArray(), driveTrain = result.getString("driveTrain").toCharArray(), Auto = String.valueOf(result.getDouble("Auto")).toCharArray(), Offense = String.valueOf(result.getDouble("Offense")).toCharArray(), Defense = String.valueOf(result.getDouble("Defense")).toCharArray(), Mobility = String.valueOf(result.getInt("Mobility")).toCharArray(), Total = String.valueOf(result.getDouble("Total")).toCharArray(), WinStreak = String.valueOf(result.getInt("WinStreak")).toCharArray();
-            if (matchChar(teamName, charFilter, matchCase) || matchChar(driveTrain, charFilter, matchCase) || matchChar(Auto, charFilter, matchCase) || matchChar(Offense, charFilter, matchCase) || matchChar(Defense, charFilter, matchCase) || matchChar(Mobility, charFilter, matchCase) || matchChar(Total, charFilter, matchCase) || matchChar(WinStreak, charFilter, matchCase)) {
-                teamdata.getItems().add(new Team(result.getString("TeamNumber"), result.getString("DriveTrain"), ScoreCalculator.round(result.getDouble("Auto"), i), ScoreCalculator.round(result.getDouble("Offense"), i), ScoreCalculator.round(result.getDouble("Defense"), i), ScoreCalculator.round(result.getDouble("Mobility"), i), ScoreCalculator.round(result.getDouble("Total"), i), result.getInt("WinStreak")));
+            if (matchChar(teamName, charFilter) || matchChar(driveTrain, charFilter) || matchChar(Auto, charFilter) || matchChar(Offense, charFilter) || matchChar(Defense, charFilter) || matchChar(Mobility, charFilter) || matchChar(Total, charFilter) || matchChar(WinStreak, charFilter)) {
+                teamdata.getItems().add(new Team(result.getString("TeamNumber"), result.getString("DriveTrain"), ScoreCalculator.round(result.getDouble("Auto"), i), ScoreCalculator.round(result.getDouble("Offense"), i), ScoreCalculator.round(result.getDouble("Defense"), i), ScoreCalculator.round(result.getDouble("Mobility"), i), ScoreCalculator.round(result.getDouble("Total"), i), result.getInt("WinStreak"), ranks.get(result.getString("TeamNumber"))));
             }
         }
 
     }
 
-    private boolean matchChar(char[] chars, char[] comparisonChars, boolean matchCase) {
-      boolean matchFound = false;
-      ArrayList<Character> listChars = new ArrayList<>();
-        ArrayList<Character> listComparisonChars = new ArrayList<>();
-      for (int i = 0; i <= (chars.length - comparisonChars.length); i++) {
-        for (int n = 0; n < comparisonChars.length; n++) {
-            if (matchCase) {
-            listComparisonChars.add(comparisonChars[n]);
-            listChars.add(chars[n+i]);
-            } else {
-                listComparisonChars.add(Character.toLowerCase(comparisonChars[n]));
-                listChars.add(Character.toLowerCase(chars[n+i]));
-            }
-        }
-        if (listChars.equals(listComparisonChars)) {
-            matchFound = true;
-            break;
-        }
-        listComparisonChars.clear();
-        listChars.clear();
-      }
-      return matchFound;  
-    }
+    
     public void clearAllData() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
         conn.createStatement().executeUpdate("DELETE FROM TeamData");
@@ -152,16 +143,6 @@ public class SQLManager {
         conn.close();
     }
 
-    public HashMap<String, Integer> getEntries(ResultSet result) throws SQLException {
-        HashMap<String, Integer> entries = new HashMap<>();
-        result.beforeFirst();
-        while(result.next()) {
-            entries.put(result.getString("TeamNumber"), result.getInt("Entries"));
-        }
-        return entries;
-        
-    }
-
     public boolean checkForUpdates() throws SQLException {
         boolean updated = false;
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
@@ -172,5 +153,71 @@ public class SQLManager {
         }
         conn.close();
         return updated;
+    }
+
+
+
+    // support methods
+    private HashMap<String, Integer> getEntries(ResultSet result) throws SQLException {
+        HashMap<String, Integer> entries = new HashMap<>();
+        result.beforeFirst();
+        while(result.next()) {
+            entries.put(result.getString("TeamNumber"), result.getInt("Entries"));
+        }
+        return entries;
+        
+    }
+
+    private boolean matchChar(char[] chars, char[] comparisonChars) {
+        boolean matchFound = false;
+        ArrayList<Character> listChars = new ArrayList<>();
+          ArrayList<Character> listComparisonChars = new ArrayList<>();
+        for (int i = 0; i <= (chars.length - comparisonChars.length); i++) {
+          for (int n = 0; n < comparisonChars.length; n++) {
+              listComparisonChars.add(comparisonChars[n]);
+              listChars.add(chars[n+i]);
+          }
+          if (listChars.equals(listComparisonChars)) {
+              matchFound = true;
+              break;
+          }
+          listComparisonChars.clear();
+          listChars.clear();
+        }
+        return matchFound;  
+      }
+
+
+    private static Map<String, Double> sortByValue(Map<String, Double> unsortMap)
+    {
+        List<Entry<String, Double>> list = new LinkedList<>(unsortMap.entrySet());
+
+        // Sorting the list based on values
+        list.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()) == 0
+                ? o2.getKey().compareTo(o1.getKey())
+                : o2.getValue().compareTo(o1.getValue()));
+        return list.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue, (a, b) -> b, LinkedHashMap::new));
+
+    }
+
+    
+    private static HashMap<String, Integer> rankTeams (ResultSet result, String rankType) throws SQLException {
+        Map<String, Double> sorter = new HashMap<String,Double>();
+        while(result.next()) {
+            sorter.put(result.getString("TeamNumber"), result.getDouble(rankType));
+        }
+        result.beforeFirst();
+        sorter = sortByValue(sorter);
+        HashMap<String, Integer> ranks = new HashMap<>();
+        int i = 1;
+        getRank(ranks, i, sorter.keySet());
+        return ranks;
+    }
+
+    private static void getRank(HashMap<String, Integer> ranks, int i, Set<String> keys) {
+        for (String key: keys) {
+            ranks.put(key, i);
+            i++; 
+        }
     }
 }
