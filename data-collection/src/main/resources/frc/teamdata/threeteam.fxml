@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="694.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frc.teamdata.SecondaryController">
    <children>
       <HBox layoutX="76.0" layoutY="211.0" prefHeight="136.0" prefWidth="263.0">
@@ -139,5 +138,8 @@
       <CheckBox fx:id="won1" layoutX="171.0" layoutY="172.0" mnemonicParsing="false" text="Won" />
       <CheckBox fx:id="won2" layoutX="701.0" layoutY="181.0" mnemonicParsing="false" text="Won" />
       <CheckBox fx:id="won3" layoutX="438.0" layoutY="397.0" mnemonicParsing="false" text="Won" />
+      <CheckBox fx:id="dead1" layoutX="22.0" layoutY="271.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead2" layoutX="570.0" layoutY="271.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead3" layoutX="303.0" layoutY="500.0" mnemonicParsing="false" text="Dead" />
    </children>
 </Pane>

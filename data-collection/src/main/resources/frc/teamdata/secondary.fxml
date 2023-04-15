@@ -263,5 +263,11 @@
          </font>
       </Label>
       <Button layoutX="426.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Go Back" />
+      <CheckBox fx:id="dead1" layoutX="4.0" layoutY="139.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead2" layoutX="4.0" layoutY="340.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead3" layoutX="4.0" layoutY="530.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead4" layoutX="584.0" layoutY="131.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead5" layoutX="586.0" layoutY="332.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead6" layoutX="598.0" layoutY="521.0" mnemonicParsing="false" text="Dead" />
    </children>
 </Pane>

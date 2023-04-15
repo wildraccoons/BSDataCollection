@@ -219,5 +219,10 @@
       <CheckBox fx:id="won4" layoutX="730.0" layoutY="250.0" mnemonicParsing="false" text="Won" />
       <CheckBox fx:id="won3" layoutX="741.0" layoutY="44.0" mnemonicParsing="false" text="Won" />
       <CheckBox fx:id="won5" layoutX="432.0" layoutY="435.0" mnemonicParsing="false" text="Won" />
+      <CheckBox fx:id="dead2" layoutX="288.0" layoutY="330.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead1" layoutX="288.0" layoutY="130.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead3" layoutX="599.0" layoutY="130.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead4" layoutX="599.0" layoutY="330.0" mnemonicParsing="false" text="Dead" />
+      <CheckBox fx:id="dead5" layoutX="313.0" layoutY="520.0" mnemonicParsing="false" text="Dead" />
    </children>
 </Pane>

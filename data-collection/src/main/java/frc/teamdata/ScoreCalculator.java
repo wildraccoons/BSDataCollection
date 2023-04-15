@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import javafx.scene.control.CheckBox;
 public class ScoreCalculator {
     
-    public void evaluateScore(String TeamName, String DriveTrain, boolean Won, CheckBox z1, CheckBox z2, CheckBox z3, CheckBox z4, CheckBox z5, CheckBox z6, CheckBox z7, CheckBox z8, CheckBox z9, CheckBox z10, CheckBox z11, CheckBox z12, CheckBox z13, CheckBox z14, CheckBox z15, CheckBox z16, CheckBox z17, CheckBox z18, CheckBox z19, CheckBox z20, CheckBox z21, CheckBox z22, CheckBox z23, CheckBox z24, CheckBox z25) throws ClassNotFoundException, SQLException {
+    public void evaluateScore(String TeamName, String DriveTrain, boolean Won, CheckBox z1, CheckBox z2, CheckBox z3, CheckBox z4, CheckBox z5, CheckBox z6, CheckBox z7, CheckBox z8, CheckBox z9, CheckBox z10, CheckBox z11, CheckBox z12, CheckBox z13, CheckBox z14, CheckBox z15, CheckBox z16, CheckBox z17, CheckBox z18, CheckBox z19, CheckBox z20, CheckBox z21, CheckBox z22, CheckBox z23, CheckBox z24, CheckBox z25, CheckBox died) throws ClassNotFoundException, SQLException {
         int Defense = 0, Offense =0 , Mobility = 0, Auto = 0, Total = 0;
         double AvgDefense = 0, AvgOffense = 0, AvgMobility = 0, AvgAuto = 0, AvgTotal = 0;
         SQLManager team = new SQLManager(TeamName);
@@ -34,6 +34,7 @@ public class ScoreCalculator {
         z23.setAllowIndeterminate(false);
         z24.setAllowIndeterminate(false);
         z25.setAllowIndeterminate(false);
+        died.setAllowIndeterminate(false);
 
 
 
@@ -137,7 +138,12 @@ public class ScoreCalculator {
             Total += 1;
         }
 
-
+        if (died.isSelected()) {
+            Defense = 0;
+            Mobility = 0;
+            Offense = 0;
+            Total = -1;
+        }
 
         AvgDefense = ((double) Defense)/4;
         AvgAuto = ((double) Auto)/10;
