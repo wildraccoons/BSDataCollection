@@ -8,4 +8,7 @@
         "lib/**/*.jar",
         "/User/DesignTeam/Downloads/jmetro-11.6.16.jar"
     ]
+    ,
+
+    "maven.executable.path": "C:/Users/DesignTeam/Downloads/apache-maven-4.0.0-alpha-5-bin/apache-maven-4.0.0-alpha-5/bin/mvn.cmd"
 }
