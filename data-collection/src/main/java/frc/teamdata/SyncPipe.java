@@ -23,7 +23,7 @@ public SyncPipe(InputStream istrm, OutputStream ostrm) {
           {
               ostrm_.write(buffer, 0, length);
               String details = new String(buffer, 0, length);
-              if (details.contains(chars)) {
+              if (!(details.contains(chars))) {
               str.add(details);
               }
           }
