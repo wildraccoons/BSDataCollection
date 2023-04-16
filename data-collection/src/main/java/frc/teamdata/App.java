@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * JavaFX App
@@ -31,7 +32,20 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        String[] command =
+    {
+        "cmd",
+    };
+        Process p = Runtime.getRuntime().exec(command);
+        new Thread(new SyncPipe(p.getErrorStream(), System.err)).start();
+        new Thread(new SyncPipe(p.getInputStream(), System.out)).start();
+        PrintWriter stdin = new PrintWriter(p.getOutputStream());
+        stdin.println("dir c:\\C:/Users/DesignTeam/Downloads/BSDataCollection/BSDataCollection.jar");
+        stdin.println("jar -tvf BSDataCollection.jar");
+        stdin.close();
+        int returnCode = p.waitFor();
+        System.out.println("Return code = " + returnCode);
         launch();
     }
 
