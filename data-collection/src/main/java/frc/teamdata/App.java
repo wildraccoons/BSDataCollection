@@ -38,8 +38,7 @@ public class App extends Application {
         "cmd",
     };
         Process p = Runtime.getRuntime().exec(command);
-        new Thread(new SyncPipe(p.getErrorStream(), System.err)).start();
-        new Thread(new SyncPipe(p.getInputStream(), System.out)).start();
+        new Thread(new SyncPipe(p.getInputStream())).start();
         PrintWriter stdin = new PrintWriter(p.getOutputStream());
         stdin.println("dir c:\\C:/Users/DesignTeam/Downloads/BSDataCollection/BSDataCollection.jar");
         stdin.println("jar -tvf BSDataCollection.jar");

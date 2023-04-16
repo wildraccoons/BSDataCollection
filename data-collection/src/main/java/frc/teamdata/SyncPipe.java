@@ -1,17 +1,14 @@
 package frc.teamdata;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.lang.CharSequence;
 
 class SyncPipe implements Runnable
 {
-public SyncPipe(InputStream istrm, OutputStream ostrm) {
+public SyncPipe(InputStream istrm) {
       istrm_ = istrm;
-      ostrm_ = ostrm;
   }
   public void run() {
       try
@@ -29,7 +26,6 @@ public SyncPipe(InputStream istrm, OutputStream ostrm) {
       {
           e.printStackTrace();
       }
-  }
-  private final OutputStream ostrm_;
+    }
   private final InputStream istrm_;
 }
