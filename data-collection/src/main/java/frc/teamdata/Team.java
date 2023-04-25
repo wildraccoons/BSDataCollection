@@ -1,10 +1,10 @@
 package frc.teamdata;
 
 public class Team {
-    String TeamNumber, DriveTrain;
+    String TeamNumber, DriveTrain, Rank;
     double Auto, Offense, Defense, Mobility, Total;
-    int WinStreak, Rank;
-    public Team(String TeamNumber, String DriveTrain, double Auto, double Offense, double Defense, double Mobility, double Total, int WinStreak, int Rank) {
+    int WinStreak;
+    public Team(String TeamNumber, String DriveTrain, double Auto, double Offense, double Defense, double Mobility, double Total, int WinStreak, String Rank) {
         this.TeamNumber = TeamNumber;
         this.DriveTrain = DriveTrain;
         this.Auto = Auto;
@@ -79,11 +79,11 @@ public class Team {
         this.WinStreak = WinStreak;
     }
 
-    public int getRank() {
+    public String getRank() {
         return Rank;
     }
 
-    public void setRank(int Rank) {
-        this.Rank = Rank;
+    public void setRank(String Rank) {
+        this.Rank.replace(this.Rank, Rank);
     }
 }

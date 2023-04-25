@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -94,7 +93,7 @@ public class SQLManager {
     public void updateFXTable(TableView<Team> teamdata, int i, String rankType) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
         ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData");
-        HashMap<String, Integer> ranks = rankTeams(result, rankType);
+        HashMap<String, String> ranks = rankTeams(result, rankType, i);
         while(result.next()) {
             teamdata.getItems().add(new Team(result.getString("TeamNumber"), result.getString("DriveTrain"), ScoreCalculator.round(result.getDouble("Auto"), i), ScoreCalculator.round(result.getDouble("Offense"), i), ScoreCalculator.round(result.getDouble("Defense"), i), ScoreCalculator.round(result.getDouble("Mobility"), i), ScoreCalculator.round(result.getDouble("Total"), i), result.getInt("WinStreak"), ranks.get(result.getString("TeamNumber"))));
         }
@@ -110,7 +109,7 @@ public class SQLManager {
     public void filterRows(TableView<Team> teamdata, String filter, int i, String rankType) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
         ResultSet result = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM TeamData");
-        HashMap<String, Integer> ranks = rankTeams(result, rankType);
+        HashMap<String, String> ranks = rankTeams(result, rankType, i);
         char[] charFilter = filter.toCharArray();
         while(result.next()) {
             char[] teamName = result.getString("TeamNumber").toCharArray(), driveTrain = result.getString("driveTrain").toCharArray(), Auto = String.valueOf(result.getDouble("Auto")).toCharArray(), Offense = String.valueOf(result.getDouble("Offense")).toCharArray(), Defense = String.valueOf(result.getDouble("Defense")).toCharArray(), Mobility = String.valueOf(result.getInt("Mobility")).toCharArray(), Total = String.valueOf(result.getDouble("Total")).toCharArray(), WinStreak = String.valueOf(result.getInt("WinStreak")).toCharArray();
@@ -198,23 +197,27 @@ public class SQLManager {
     }
 
     
-    private static HashMap<String, Integer> rankTeams (ResultSet result, String rankType) throws SQLException {
+    private static HashMap<String, String> rankTeams (ResultSet result, String rankType, int i) throws SQLException {
         Map<String, Double> sorter = new HashMap<String,Double>();
         while(result.next()) {
             sorter.put(result.getString("TeamNumber"), result.getDouble(rankType));
         }
         result.beforeFirst();
         sorter = sortByValue(sorter);
-        HashMap<String, Integer> ranks = new HashMap<>();
-        int i = 1;
-        getRank(ranks, i, sorter.keySet());
+        HashMap<String, String> ranks = new HashMap<>();
+        int iteration = 0;
+        double previousStat = 0;
+        for (String key: sorter.keySet()) {
+            if (ScoreCalculator.round(previousStat, i) == ScoreCalculator.round(sorter.get(key), i)) {
+                ranks.put(key, (String.valueOf(iteration) + " (Tied)"));
+            } else {
+                iteration++;
+                ranks.put(key, (String.valueOf(iteration)));
+            }
+            System.out.println(iteration);
+            previousStat = sorter.get(key);
+        }
         return ranks;
     }
 
-    private static void getRank(HashMap<String, Integer> ranks, int i, Set<String> keys) {
-        for (String key: keys) {
-            ranks.put(key, i);
-            i++; 
-        }
-    }
 }

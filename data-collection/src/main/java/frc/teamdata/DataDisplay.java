@@ -41,7 +41,7 @@ public class DataDisplay {
     @FXML
     public TableColumn<Team, Integer> WinStreak = new TableColumn<>("WinStreak");
     @FXML
-    public TableColumn<Team, Integer> Rank = new TableColumn<>("Rank");
+    public TableColumn<Team, String> Rank = new TableColumn<>("Rank");
     @FXML
     public ComboBox<String> rankBox;
     @FXML
